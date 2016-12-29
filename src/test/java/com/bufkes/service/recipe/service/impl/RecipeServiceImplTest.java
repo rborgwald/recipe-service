@@ -177,4 +177,15 @@ public class RecipeServiceImplTest {
 		verify(recipeRepository).findByNameContainingIgnoreCase(anyString());
 		assertThat(returnedList).isNotNull();
 	}
+	
+	@Test
+	public void testGetAllRecipes() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+        when(recipeRepository.findAll()).thenReturn(Arrays.asList(recipe));
+
+        List<Recipe> allRecipes = recipeService.getAllRecipes();
+
+        verify(recipeRepository).findAll();
+        assertThat(allRecipes).isNotEmpty();
+	}
 }

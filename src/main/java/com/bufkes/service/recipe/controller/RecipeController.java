@@ -57,4 +57,9 @@ public class RecipeController {
 		
 		return recipeService.getRecipesByNameLike(name);
 	}
+	
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public List<Recipe> getAllRecipes() {
+		return recipeService.getAllRecipes();
+	}
 }

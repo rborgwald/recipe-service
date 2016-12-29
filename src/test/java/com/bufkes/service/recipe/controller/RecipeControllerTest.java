@@ -197,4 +197,30 @@ public class RecipeControllerTest {
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
 
     }
+    
+    @Test
+    public void testGetAllRecipes() throws Exception {
+    	Recipe recipe1 = TestDataBuilder.buildRecipe();
+    	recipe1.setId("1");
+    	Recipe recipe2 = TestDataBuilder.buildRecipe();
+    	recipe2.setId("2");
+    	when(recipeService.getAllRecipes()).thenReturn(Arrays.asList(recipe1, recipe2));
+    	
+    	MvcResult result = this.mvc.perform(get("/recipes/all")).andReturn();
+    	
+    	assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe1.getId());
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe2.getId());
+    	verify(recipeService).getAllRecipes();
+    }
+    
+    @Test
+    public void testGetAllRecipes_Exception() throws Exception {
+    	when(recipeService.getAllRecipes()).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/recipes/all")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
+
+    }
 }

@@ -202,4 +202,38 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=foobar", List.class);
 		assertEquals(0, listOfRecipes.size());
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_IgnoreCase() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		recipe.setName("foobar");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=oBA", List.class);
+		assertEquals(1, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetAllRecipes() {
+		Recipe recipe1 = TestDataBuilder.buildRecipe();
+		Recipe recipe2 = TestDataBuilder.buildRecipe();
+		Recipe recipe3 = TestDataBuilder.buildRecipe();
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe1), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes/all", List.class);
+		assertEquals(3, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetAllRecipes_NoRecipes() {
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes/all", List.class);
+		assertEquals(0, listOfRecipes.size());
+	}
 }

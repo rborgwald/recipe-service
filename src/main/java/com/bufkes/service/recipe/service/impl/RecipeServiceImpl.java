@@ -64,4 +64,9 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeRepository.findByNameContainingIgnoreCase(name);
 	}
 
+	@Override
+	public List<Recipe> getAllRecipes() {
+		return (List<Recipe>) recipeRepository.findAll();
+	}
+
 }
