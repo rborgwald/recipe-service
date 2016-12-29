@@ -1,0 +1,10 @@
+package com.bufkes.service.recipe.exception;
+
+public enum ErrorType {
+
+	SYSTEM, XSD_VALIDATION, BUSINESS_VALIDATION, DATA_VALIDATION, CONCURRENT_UPDATE, NO_DATA_FOUND, AUTHENTICATION, AUTHORIZATION, BAD_REQUEST, FORBIDDEN, UNPROCESSABLE_ENTITY;
+
+    private ErrorType() {
+
+    }
+}
