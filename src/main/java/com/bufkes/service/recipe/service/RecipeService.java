@@ -1,5 +1,7 @@
 package com.bufkes.service.recipe.service;
 
+import java.util.List;
+
 import com.bufkes.service.recipe.model.Recipe;
 
 public interface RecipeService {
@@ -12,4 +14,5 @@ public interface RecipeService {
 
 	public void deleteRecipe(String recipeId);
 
+	public List<Recipe> getRecipesByNameLike(String name);
 }

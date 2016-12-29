@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
+import java.util.Arrays;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -167,6 +169,29 @@ public class RecipeControllerTest {
         doThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg")).when(recipeService).deleteRecipe(anyString());
 
         MvcResult result = this.mvc.perform(delete("/recipes/recipeId")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
+
+    }
+    
+    @Test
+    public void testGetRecipesByName() throws Exception {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeService.getRecipesByNameLike(anyString())).thenReturn(Arrays.asList(recipe));
+
+        MvcResult result = this.mvc.perform(get("/recipes?name=recipeName")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
+
+        verify(recipeService).getRecipesByNameLike(anyString());
+    }
+
+    @Test
+    public void testGetRecipesByName_Exception() throws Exception {
+    	when(recipeService.getRecipesByNameLike(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/recipes?name=recipeName")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);

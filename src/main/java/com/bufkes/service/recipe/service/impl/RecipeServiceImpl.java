@@ -1,6 +1,8 @@
 package com.bufkes.service.recipe.service.impl;
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,6 +56,12 @@ public class RecipeServiceImpl implements RecipeService {
 	public void deleteRecipe(String recipeId) {
 		isTrue(!StringUtils.isEmpty(recipeId), ErrorType.SYSTEM, "Recipe id is null or empty");
 		recipeRepository.deleteById(recipeId);
+	}
+
+	@Override
+	public List<Recipe> getRecipesByNameLike(String name) {
+		isTrue(!StringUtils.isEmpty(name), ErrorType.SYSTEM, "Recipe name is null or empty");
+		return recipeRepository.findByNameContainingIgnoreCase(name);
 	}
 
 }

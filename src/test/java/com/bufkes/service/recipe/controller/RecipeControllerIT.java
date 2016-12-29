@@ -2,9 +2,9 @@ package com.bufkes.service.recipe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 
 import com.bufkes.service.recipe.RecipeApplicationITConfig;
 import com.bufkes.service.recipe.exception.ServiceError;
-import com.bufkes.service.recipe.exception.ServiceException;
 import com.bufkes.service.recipe.model.Recipe;
 import com.bufkes.service.recipe.repository.RecipeRepository;
 import com.bufkes.service.recipe.util.TestDataBuilder;
@@ -103,5 +102,104 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		ResponseEntity<ServiceError> updateRecipeResponse = testRestTemplate.exchange("/recipes/{recipeId}", HttpMethod.PUT, new HttpEntity<>(recipe), ServiceError.class, recipe.getId());
 		assertEquals(HttpStatus.BAD_REQUEST, updateRecipeResponse.getStatusCode());
 		assertThat(updateRecipeResponse.getBody().getErrorMessage()).contains("Recipe not found");
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_SameNames() {
+		Recipe recipe1 = TestDataBuilder.buildRecipe();
+		Recipe recipe2 = TestDataBuilder.buildRecipe();
+		Recipe recipe3 = TestDataBuilder.buildRecipe();
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe1), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=" + recipe1.getName(), List.class);
+		assertEquals(3, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_TwoNamesMatch() {
+		Recipe recipe1 = TestDataBuilder.buildRecipe();
+		Recipe recipe2 = TestDataBuilder.buildRecipe();
+		Recipe recipe3 = TestDataBuilder.buildRecipe();
+		recipe3.setName("foo");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe1), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=" + recipe1.getName(), List.class);
+		assertEquals(2, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_OneNameMatches() {
+		Recipe recipe1 = TestDataBuilder.buildRecipe();
+		Recipe recipe2 = TestDataBuilder.buildRecipe();
+		Recipe recipe3 = TestDataBuilder.buildRecipe();
+		recipe2.setName("123");
+		recipe3.setName("foo");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe1), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=" + recipe1.getName(), List.class);
+		assertEquals(1, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_PartialMatchBeginning() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		recipe.setName("foobar");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
+
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=foo", List.class);
+		assertEquals(1, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_PartialMatchEnd() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		recipe.setName("foobar");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
+
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=bar", List.class);
+		assertEquals(1, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_PartialMatchMiddle() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		recipe.setName("foobar");
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
+
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=oba", List.class);
+		assertEquals(1, listOfRecipes.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetRecipesByName_NoMatch() {
+		Recipe recipe1 = TestDataBuilder.buildRecipe();
+		Recipe recipe2 = TestDataBuilder.buildRecipe();
+		Recipe recipe3 = TestDataBuilder.buildRecipe();
+		
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe1), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
+		testRestTemplate.postForEntity("/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
+	
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/recipes?name=foobar", List.class);
+		assertEquals(0, listOfRecipes.size());
 	}
 }

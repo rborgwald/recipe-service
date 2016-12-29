@@ -7,6 +7,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -149,5 +152,29 @@ public class RecipeServiceImplTest {
 		
 		recipeService.deleteRecipe(recipe.getId());
 		verify(recipeRepository).deleteById(anyString());
+	}
+	
+	@Test
+	public void testGetRecipesByNameLike_BlankName() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByNameLike(""))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Recipe name is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByNameLike_NullName() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByNameLike(null))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Recipe name is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByNameLike() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeRepository.findByNameContainingIgnoreCase(anyString())).thenReturn(Arrays.asList(recipe));
+		
+		List<Recipe> returnedList = recipeService.getRecipesByNameLike(recipe.getId());
+		verify(recipeRepository).findByNameContainingIgnoreCase(anyString());
+		assertThat(returnedList).isNotNull();
 	}
 }
