@@ -24,7 +24,7 @@ public class Recipe {
 	
 	private String volume;
 	
-	private int page;
+	private Integer page;
 	
 	public String getId() {
 		return id;
@@ -58,7 +58,7 @@ public class Recipe {
 		this.volume = volume;
 	}
 	
-	public int getPage() {
+	public Integer getPage() {
 		return page;
 	}
 	

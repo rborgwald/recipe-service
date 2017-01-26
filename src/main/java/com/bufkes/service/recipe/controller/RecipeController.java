@@ -20,7 +20,7 @@ import static com.bufkes.service.recipe.util.Assert.isTrue;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recipes")
+@RequestMapping("${gateway.api.prefix}/recipes")
 public class RecipeController {
 
 	@Autowired

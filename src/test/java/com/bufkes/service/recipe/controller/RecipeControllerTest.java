@@ -64,7 +64,7 @@ public class RecipeControllerTest {
 
         when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
 
-        MvcResult result = this.mvc.perform(get("/recipes/recipeId")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes/recipeId")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
 
@@ -76,7 +76,7 @@ public class RecipeControllerTest {
 
         when(recipeService.getRecipeById(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
 
-        MvcResult result = this.mvc.perform(get("/recipes/recipeId")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes/recipeId")).andReturn();
 
         Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(400);
         Assertions.assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
@@ -88,7 +88,7 @@ public class RecipeControllerTest {
 		Recipe recipe = TestDataBuilder.buildRecipe();
 		when(recipeService.saveRecipe(any(Recipe.class))).thenReturn(recipe);
 
-        MvcResult result = this.mvc.perform(post("/recipes").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(post("/api/recipes").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
         assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
@@ -103,7 +103,7 @@ public class RecipeControllerTest {
 
         doThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg")).when(recipeService).saveRecipe(any(Recipe.class));
 
-        MvcResult result = this.mvc.perform(post("/recipes").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(post("/api/recipes").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
@@ -115,7 +115,7 @@ public class RecipeControllerTest {
 		Recipe recipe = TestDataBuilder.buildRecipe();
 		when(recipeService.updateRecipe(any(Recipe.class))).thenReturn(recipe);
 
-        MvcResult result = this.mvc.perform(put("/recipes/" + recipe.getId()).content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(put("/api/recipes/" + recipe.getId()).content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
 
@@ -127,7 +127,7 @@ public class RecipeControllerTest {
         Recipe recipe = TestDataBuilder.buildRecipe();
         doThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg")).when(recipeService).updateRecipe(any(Recipe.class));
 
-        MvcResult result = this.mvc.perform(put("/recipes/" + recipe.getId()).content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(put("/api/recipes/" + recipe.getId()).content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
@@ -136,7 +136,7 @@ public class RecipeControllerTest {
     
     @Test
     public void testUpdateRecipe_NoRecipe() throws Exception {
-        MvcResult result = this.mvc.perform(put("/recipes/foobar").content(TestUtil.asJsonString(null)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(put("/api/recipes/foobar").content(TestUtil.asJsonString(null)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(500);
         verify(recipeService, Mockito.never()).updateRecipe(any(Recipe.class));
@@ -146,7 +146,7 @@ public class RecipeControllerTest {
     public void testUpdateRecipe_RecipeIdsDoNotMatch() throws Exception {
     	Recipe recipe = TestDataBuilder.buildRecipe();
 
-        MvcResult result = this.mvc.perform(put("/recipes/foobar").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = this.mvc.perform(put("/api/recipes/foobar").content(TestUtil.asJsonString(recipe)).contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("Recipe Ids do not match")).isEqualTo(true);
@@ -157,7 +157,7 @@ public class RecipeControllerTest {
     public void testDeleteRecipe() throws Exception {
         doNothing().when(recipeService).deleteRecipe(anyString());
 
-        MvcResult result = this.mvc.perform(delete("/recipes/recipeId")).andReturn();
+        MvcResult result = this.mvc.perform(delete("/api/recipes/recipeId")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
         verify(recipeService).deleteRecipe(anyString());
@@ -168,7 +168,7 @@ public class RecipeControllerTest {
 
         doThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg")).when(recipeService).deleteRecipe(anyString());
 
-        MvcResult result = this.mvc.perform(delete("/recipes/recipeId")).andReturn();
+        MvcResult result = this.mvc.perform(delete("/api/recipes/recipeId")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
@@ -180,7 +180,7 @@ public class RecipeControllerTest {
 		Recipe recipe = TestDataBuilder.buildRecipe();
 		when(recipeService.getRecipesByNameLike(anyString())).thenReturn(Arrays.asList(recipe));
 
-        MvcResult result = this.mvc.perform(get("/recipes?name=recipeName")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes?name=recipeName")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
         assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
@@ -191,7 +191,7 @@ public class RecipeControllerTest {
     @Test
     public void testGetRecipesByName_Exception() throws Exception {
     	when(recipeService.getRecipesByNameLike(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
-        MvcResult result = this.mvc.perform(get("/recipes?name=recipeName")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes?name=recipeName")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
@@ -206,7 +206,7 @@ public class RecipeControllerTest {
     	recipe2.setId("2");
     	when(recipeService.getAllRecipes()).thenReturn(Arrays.asList(recipe1, recipe2));
     	
-    	MvcResult result = this.mvc.perform(get("/recipes/all")).andReturn();
+    	MvcResult result = this.mvc.perform(get("/api/recipes/all")).andReturn();
     	
     	assertThat(result.getResponse().getStatus()).isEqualTo(200);
     	assertThat(result.getResponse().getContentAsString()).contains(recipe1.getId());
@@ -217,7 +217,7 @@ public class RecipeControllerTest {
     @Test
     public void testGetAllRecipes_Exception() throws Exception {
     	when(recipeService.getAllRecipes()).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
-        MvcResult result = this.mvc.perform(get("/recipes/all")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes/all")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
