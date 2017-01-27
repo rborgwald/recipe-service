@@ -63,10 +63,34 @@ public class RecipeServiceImpl implements RecipeService {
 		isTrue(!StringUtils.isEmpty(name), ErrorType.SYSTEM, "Recipe name is null or empty");
 		return recipeRepository.findByNameContainingIgnoreCase(name);
 	}
+	
+	@Override
+	public List<Recipe> getRecipesByMealType(String mealType) {
+		isTrue(!StringUtils.isEmpty(mealType), ErrorType.SYSTEM, "Meal type is null or empty");
+		return recipeRepository.findByMealTypeName(StringUtils.upperCase(mealType));
+	}
+	
+	@Override
+	public List<Recipe> getRecipesByCuisineType(String cuisineType) {
+		isTrue(!StringUtils.isEmpty(cuisineType), ErrorType.SYSTEM, "Cuisine type is null or empty");
+		return recipeRepository.findByCuisineTypeName(StringUtils.upperCase(cuisineType));
+	}
+	
+	@Override
+	public List<Recipe> getRecipesByProteinType(String proteinType) {
+		isTrue(!StringUtils.isEmpty(proteinType), ErrorType.SYSTEM, "Protein type is null or empty");
+		return recipeRepository.findByProteinTypeName(StringUtils.upperCase(proteinType));
+	}
+	
+	@Override
+	public List<Recipe> getRecipesByPreparationType(String preparationType) {
+		isTrue(!StringUtils.isEmpty(preparationType), ErrorType.SYSTEM, "Preparation type is null or empty");
+		return recipeRepository.findByPreparationTypeName(StringUtils.upperCase(preparationType));
+	}
 
 	@Override
 	public List<Recipe> getAllRecipes() {
-		return (List<Recipe>) recipeRepository.findAll();
+		 return (List<Recipe>) recipeRepository.findAll();
 	}
 
 }

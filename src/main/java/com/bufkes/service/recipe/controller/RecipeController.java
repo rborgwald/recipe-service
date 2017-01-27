@@ -1,5 +1,9 @@
 package com.bufkes.service.recipe.controller;
 
+import static com.bufkes.service.recipe.util.Assert.isTrue;
+
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,15 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bufkes.service.recipe.exception.ErrorType;
 import com.bufkes.service.recipe.model.Recipe;
 import com.bufkes.service.recipe.service.RecipeService;
-import static com.bufkes.service.recipe.util.Assert.isTrue;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("${gateway.api.prefix}/recipes")
@@ -51,15 +51,44 @@ public class RecipeController {
 		recipeService.deleteRecipe(recipeId);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
-	public List<Recipe> getRecipesByName(@RequestParam String name) {
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+	public List<Recipe> getRecipesByName(@PathVariable String name) {
 		isTrue(StringUtils.isNotBlank(name), ErrorType.BAD_REQUEST, "No name provided to search by");
 		
 		return recipeService.getRecipesByNameLike(name);
 	}
 	
+	@RequestMapping(value = "/mealtype/{mealType}", method = RequestMethod.GET)
+	public List<Recipe> getReceipesByMealType(@PathVariable String mealType) {
+		isTrue(StringUtils.isNotBlank(mealType), ErrorType.BAD_REQUEST, "No meal type provided to search by");
+		
+		return recipeService.getRecipesByMealType(mealType);
+	}
+	
+	@RequestMapping(value = "/cuisinetype/{cuisineType}", method = RequestMethod.GET)
+	public List<Recipe> getReceipesByCuisineType(@PathVariable String cuisineType) {
+		isTrue(StringUtils.isNotBlank(cuisineType), ErrorType.BAD_REQUEST, "No cuisine type provided to search by");
+		
+		return recipeService.getRecipesByCuisineType(cuisineType);
+	}
+	
+	@RequestMapping(value = "/proteintype/{proteinType}", method = RequestMethod.GET)
+	public List<Recipe> getReceipesByProteinType(@PathVariable String proteinType) {
+		isTrue(StringUtils.isNotBlank(proteinType), ErrorType.BAD_REQUEST, "No protein type provided to search by");
+		
+		return recipeService.getRecipesByProteinType(proteinType);
+	}
+	
+	@RequestMapping(value = "/preparationtype/{preparationType}", method = RequestMethod.GET)
+	public List<Recipe> getReceipesByPreparationType(@PathVariable String preparationType) {
+		isTrue(StringUtils.isNotBlank(preparationType), ErrorType.BAD_REQUEST, "No preparation type provided to search by");
+		
+		return recipeService.getRecipesByPreparationType(preparationType);
+	}
+	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public List<Recipe> getAllRecipes() {
-		return recipeService.getAllRecipes();
+		List<Recipe> allRecipes = recipeService.getAllRecipes();
+		return allRecipes;
 	}
 }

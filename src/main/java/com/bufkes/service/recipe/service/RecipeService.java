@@ -15,6 +15,15 @@ public interface RecipeService {
 	public void deleteRecipe(String recipeId);
 
 	public List<Recipe> getRecipesByNameLike(String name);
+	
+	public List<Recipe> getRecipesByMealType(String mealType);
+	
+	public List<Recipe> getRecipesByCuisineType(String mealType);
 
+	public List<Recipe> getRecipesByProteinType(String proteinType);
+	
+	public List<Recipe> getRecipesByPreparationType(String preparationType);
+	
 	public List<Recipe> getAllRecipes();
+
 }

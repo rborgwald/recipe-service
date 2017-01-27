@@ -180,7 +180,7 @@ public class RecipeControllerTest {
 		Recipe recipe = TestDataBuilder.buildRecipe();
 		when(recipeService.getRecipesByNameLike(anyString())).thenReturn(Arrays.asList(recipe));
 
-        MvcResult result = this.mvc.perform(get("/api/recipes?name=recipeName")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes/name/recipeName")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
         assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
@@ -191,7 +191,7 @@ public class RecipeControllerTest {
     @Test
     public void testGetRecipesByName_Exception() throws Exception {
     	when(recipeService.getRecipesByNameLike(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
-        MvcResult result = this.mvc.perform(get("/api/recipes?name=recipeName")).andReturn();
+        MvcResult result = this.mvc.perform(get("/api/recipes/name/recipeName")).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);

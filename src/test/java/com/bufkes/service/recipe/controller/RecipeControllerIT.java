@@ -115,7 +115,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
 	
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=" + recipe1.getName(), List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/" + recipe1.getName(), List.class);
 		assertEquals(3, listOfRecipes.size());
 	}
 	
@@ -131,7 +131,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
 	
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=" + recipe1.getName(), List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/" + recipe1.getName(), List.class);
 		assertEquals(2, listOfRecipes.size());
 	}
 	
@@ -148,7 +148,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
 	
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=" + recipe1.getName(), List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/" + recipe1.getName(), List.class);
 		assertEquals(1, listOfRecipes.size());
 	}
 	
@@ -160,7 +160,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
 
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=foo", List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/foo", List.class);
 		assertEquals(1, listOfRecipes.size());
 	}
 	
@@ -172,7 +172,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
 
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=bar", List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/bar", List.class);
 		assertEquals(1, listOfRecipes.size());
 	}
 	
@@ -184,7 +184,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
 
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=oba", List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/oba", List.class);
 		assertEquals(1, listOfRecipes.size());
 	}
 	
@@ -199,7 +199,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe2), this.httpHeaders), Recipe.class);
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe3), this.httpHeaders), Recipe.class);
 	
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=foobar", List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/foobar", List.class);
 		assertEquals(0, listOfRecipes.size());
 	}
 	
@@ -211,7 +211,7 @@ public class RecipeControllerIT extends RecipeApplicationITConfig {
 		
 		testRestTemplate.postForEntity("/api/recipes", new HttpEntity<>(TestUtil.asJsonString(recipe), this.httpHeaders), Recipe.class);
 	
-		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes?name=oBA", List.class);
+		List<Recipe> listOfRecipes = testRestTemplate.getForObject("/api/recipes/name/oBA", List.class);
 		assertEquals(1, listOfRecipes.size());
 	}
 	
