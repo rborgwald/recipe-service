@@ -164,7 +164,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testSaveAnswers_Exception() throws Exception {
+    public void testDeleteRecipe_Exception() throws Exception {
 
         doThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg")).when(recipeService).deleteRecipe(anyString());
 
@@ -196,6 +196,94 @@ public class RecipeControllerTest {
         assertThat(result.getResponse().getStatus()).isEqualTo(400);
         assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
 
+    }
+    
+    @Test
+    public void testGetRecipesByMealType() throws Exception {
+    	Recipe recipe = TestDataBuilder.buildRecipe();
+    	when(recipeService.getRecipesByMealType(anyString())).thenReturn(Arrays.asList(recipe));
+    	
+    	MvcResult result = this.mvc.perform(get("/api/recipes/mealtype/type")).andReturn();
+    	
+    	assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
+    	
+    	verify(recipeService).getRecipesByMealType(anyString());
+    }
+    
+    @Test
+    public void testGetRecipesByMealType_Exception() throws Exception {
+    	when(recipeService.getRecipesByMealType(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/api/recipes/mealtype/type")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
+    }
+    
+    @Test
+    public void testGetRecipesByCuisineType() throws Exception {
+    	Recipe recipe = TestDataBuilder.buildRecipe();
+    	when(recipeService.getRecipesByCuisineType(anyString())).thenReturn(Arrays.asList(recipe));
+    	
+    	MvcResult result = this.mvc.perform(get("/api/recipes/cuisinetype/type")).andReturn();
+    	
+    	assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
+    	
+    	verify(recipeService).getRecipesByCuisineType(anyString());
+    }
+    
+    @Test
+    public void testGetRecipesByCuisineType_Exception() throws Exception {
+    	when(recipeService.getRecipesByCuisineType(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/api/recipes/cuisinetype/type")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
+    }
+    
+    @Test
+    public void testGetRecipesByProteinType() throws Exception {
+    	Recipe recipe = TestDataBuilder.buildRecipe();
+    	when(recipeService.getRecipesByProteinType(anyString())).thenReturn(Arrays.asList(recipe));
+    	
+    	MvcResult result = this.mvc.perform(get("/api/recipes/proteintype/type")).andReturn();
+    	
+    	assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
+    	
+    	verify(recipeService).getRecipesByProteinType(anyString());
+    }
+    
+    @Test
+    public void testGetRecipesByProteinType_Exception() throws Exception {
+    	when(recipeService.getRecipesByProteinType(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/api/recipes/proteintype/type")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
+    }
+    
+    @Test
+    public void testGetRecipesByPreparationType() throws Exception {
+    	Recipe recipe = TestDataBuilder.buildRecipe();
+    	when(recipeService.getRecipesByPreparationType(anyString())).thenReturn(Arrays.asList(recipe));
+    	
+    	MvcResult result = this.mvc.perform(get("/api/recipes/preparationtype/type")).andReturn();
+    	
+    	assertThat(result.getResponse().getStatus()).isEqualTo(200);
+    	assertThat(result.getResponse().getContentAsString()).contains(recipe.getId());
+    	
+    	verify(recipeService).getRecipesByPreparationType(anyString());
+    }
+    
+    @Test
+    public void testGetRecipesByPreparationType_Exception() throws Exception {
+    	when(recipeService.getRecipesByPreparationType(anyString())).thenThrow(new ServiceException(ErrorType.BAD_REQUEST, "errorMsg"));
+        MvcResult result = this.mvc.perform(get("/api/recipes/preparationtype/type")).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(400);
+        assertThat(result.getResponse().getContentAsString().contains("errorMsg")).isEqualTo(true);
     }
     
     @Test

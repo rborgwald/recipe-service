@@ -1,5 +1,6 @@
 package com.bufkes.service.recipe.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,20 +30,20 @@ public class Recipe {
 
 	private Integer page;
 
-	@OneToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "meal_type_id", nullable = true, insertable = false, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST }, optional = true)
+	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = false)
 	private MealType mealType;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "cuisine_type_id", nullable = true, insertable = false, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
+	@JoinColumn(name = "cuisine_type_id", nullable = true, insertable = true, updatable = false)
 	private CuisineType cuisineType;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "preparation_type_id", nullable = true, insertable = false, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
+	@JoinColumn(name = "preparation_type_id", nullable = true, insertable = true, updatable = false)
 	private PreparationType preparationType;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "protein_type_id", nullable = true, insertable = false, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
+	@JoinColumn(name = "protein_type_id", nullable = true, insertable = true, updatable = false)
 	private ProteinType proteinType;
 
 	public String getId() {

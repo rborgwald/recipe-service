@@ -188,4 +188,105 @@ public class RecipeServiceImplTest {
         verify(recipeRepository).findAll();
         assertThat(allRecipes).isNotEmpty();
 	}
+	
+	@Test
+	public void testGetRecipesByMealType() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeRepository.findByMealTypeName(anyString())).thenReturn(Arrays.asList(recipe));
+		
+		List<Recipe> recipes = recipeService.getRecipesByMealType("foo");
+		
+		verify(recipeRepository).findByMealTypeName(anyString());
+		assertThat(recipes).isNotEmpty();
+	}
+	
+	@Test
+	public void testGetRecipesByMealType_mealTypeNull() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByMealType(null))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Meal type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByMealType_mealTypeBlank() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByMealType(""))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Meal type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByCuisineType() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeRepository.findByCuisineTypeName(anyString())).thenReturn(Arrays.asList(recipe));
+		
+		List<Recipe> recipes = recipeService.getRecipesByCuisineType("foo");
+		
+		verify(recipeRepository).findByCuisineTypeName(anyString());
+		assertThat(recipes).isNotEmpty();
+	}
+	
+	@Test
+	public void testGetRecipesByCuisineType_mealTypeNull() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByCuisineType(null))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Cuisine type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByCuisineType_mealTypeBlank() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByCuisineType(""))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Cuisine type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByProteinType() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeRepository.findByProteinTypeName(anyString())).thenReturn(Arrays.asList(recipe));
+		
+		List<Recipe> recipes = recipeService.getRecipesByProteinType("foo");
+		
+		verify(recipeRepository).findByProteinTypeName(anyString());
+		assertThat(recipes).isNotEmpty();
+	}
+	
+	@Test
+	public void testGetRecipesByProteinType_mealTypeNull() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByProteinType(null))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Protein type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByProteinType_mealTypeBlank() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByProteinType(""))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Protein type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByPreparationType() {
+		Recipe recipe = TestDataBuilder.buildRecipe();
+		when(recipeRepository.findByPreparationTypeName(anyString())).thenReturn(Arrays.asList(recipe));
+		
+		List<Recipe> recipes = recipeService.getRecipesByPreparationType("foo");
+		
+		verify(recipeRepository).findByPreparationTypeName(anyString());
+		assertThat(recipes).isNotEmpty();
+	}
+	
+	@Test
+	public void testGetRecipesByPreparationType_mealTypeNull() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByPreparationType(null))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Preparation type is null or empty");
+	}
+	
+	@Test
+	public void testGetRecipesByPreparationType_mealTypeBlank() {
+		Assertions.assertThatThrownBy(() -> recipeService.getRecipesByPreparationType(""))
+		.isExactlyInstanceOf(ServiceException.class).extracting(ERROR_TYPE_NAME_KEY, SERVICE_ERROR_MSG_KEY)
+		.containsExactly(ErrorType.SYSTEM.toString(), "Preparation type is null or empty");
+	}
+	
 }
