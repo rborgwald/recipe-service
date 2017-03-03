@@ -13,6 +13,8 @@ public interface RecipeService {
 	public Recipe updateRecipe(Recipe recipe);
 
 	public void deleteRecipe(String recipeId);
+	
+	public Recipe addSearchCriterion(String recipeId, String category, String type);
 
 	public List<Recipe> getRecipesByNameLike(String name);
 	

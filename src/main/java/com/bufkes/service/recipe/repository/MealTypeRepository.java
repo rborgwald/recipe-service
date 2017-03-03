@@ -9,4 +9,6 @@ import com.bufkes.service.recipe.model.MealType;
 public interface MealTypeRepository extends CrudRepository<MealType, Long> {
 
 	public List<MealType> findAll();
+	
+	public MealType findByName(String name);
 }

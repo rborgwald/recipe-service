@@ -30,20 +30,20 @@ public class Recipe {
 
 	private Integer page;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST }, optional = true)
-	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, optional = true)
+	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = true)
 	private MealType mealType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
-	@JoinColumn(name = "cuisine_type_id", nullable = true, insertable = true, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@JoinColumn(name = "cuisine_type_id", nullable = true, insertable = true, updatable = true)
 	private CuisineType cuisineType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
-	@JoinColumn(name = "preparation_type_id", nullable = true, insertable = true, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@JoinColumn(name = "preparation_type_id", nullable = true, insertable = true, updatable = true)
 	private PreparationType preparationType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST}, optional = true)
-	@JoinColumn(name = "protein_type_id", nullable = true, insertable = true, updatable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@JoinColumn(name = "protein_type_id", nullable = true, insertable = true, updatable = true)
 	private ProteinType proteinType;
 
 	public String getId() {
@@ -117,6 +117,22 @@ public class Recipe {
 	public void setProteinType(ProteinType proteinType) {
 		this.proteinType = proteinType;
 	}
+	
+	public void setCriterion(SearchCriterion criterion) {
+		if (criterion instanceof MealType) {
+			MealType type = (MealType) criterion;
+			this.setMealType(type);
+		} else if (criterion instanceof CuisineType) {
+			CuisineType type = (CuisineType) criterion;
+			this.setCuisineType(type);
+		} else if (criterion instanceof ProteinType) {
+			ProteinType type = (ProteinType) criterion;
+			this.setProteinType(type);
+		} else if (criterion instanceof PreparationType) {
+			PreparationType type = (PreparationType) criterion;
+			this.setPreparationType(type);
+		}
+	}
 
 	@Override
 	public String toString() {
@@ -124,4 +140,6 @@ public class Recipe {
 				+ ", mealType=" + mealType + ", cuisineType=" + cuisineType + ", preparationType="
 				+ preparationType + ", proteinType=" + proteinType + "]";
 	}
+
+	
 }

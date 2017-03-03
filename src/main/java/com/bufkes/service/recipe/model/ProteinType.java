@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "protein_type_lu")
-public class ProteinType {
+public class ProteinType implements SearchCriterion {
 
 	@Id
 	@Column(name="id", unique=true)

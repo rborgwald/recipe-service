@@ -15,6 +15,8 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 	
 	List<Recipe> findByNameContainingIgnoreCase(String name);
 	
+	List<Recipe> findByNameIgnoreCase(String name);
+	
 	@Query("SELECT r FROM Recipe r inner join r.mealType mt WHERE mt.name = ?1")
 	List<Recipe> findByMealTypeName(String name);
 	

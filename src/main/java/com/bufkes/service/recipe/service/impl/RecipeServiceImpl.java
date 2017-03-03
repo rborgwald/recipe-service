@@ -12,20 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bufkes.service.recipe.exception.ErrorType;
 import com.bufkes.service.recipe.model.Recipe;
+import com.bufkes.service.recipe.model.SearchCriterion;
 import com.bufkes.service.recipe.repository.RecipeRepository;
 import com.bufkes.service.recipe.service.RecipeService;
+import com.bufkes.service.recipe.validation.SearchCriteriaValidationService;
 
 
 @Component("recipeService")
 public class RecipeServiceImpl implements RecipeService {
 
-	private static final Logger logger = LogManager.getLogger(RecipeServiceImpl.class.getName());
+	private static final Logger LOG = LogManager.getLogger(RecipeServiceImpl.class.getName());
 	
 	@Autowired
 	private RecipeRepository recipeRepository;
 	
+	@Autowired
+	private SearchCriteriaValidationService searchCriteriaValidationService;
+	
 	public Recipe saveRecipe(Recipe recipe) {
 		isTrue(recipe != null, ErrorType.SYSTEM, "Recipe is null or empty");
+		List<Recipe> existingRecipes = recipeRepository.findByNameIgnoreCase(recipe.getName());
+		isTrue(existingRecipes.size() == 0, ErrorType.DATA_VALIDATION, "Recipe with same name already exists: " + recipe.getName());
+		
 		return recipeRepository.save(recipe);
 	}
 
@@ -35,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		if (recipe == null) {
 			String errorMsg = "No recipe found for id: " + id;
-			logger.error(errorMsg);
+			LOG.error(errorMsg);
 			return null;
 		} else {
 			return recipe;
@@ -56,6 +64,22 @@ public class RecipeServiceImpl implements RecipeService {
 	public void deleteRecipe(String recipeId) {
 		isTrue(!StringUtils.isEmpty(recipeId), ErrorType.SYSTEM, "Recipe id is null or empty");
 		recipeRepository.deleteById(recipeId);
+	}
+	
+	@Transactional
+	public Recipe addSearchCriterion(String recipeId, String category, String type) {
+		LOG.info("Adding search criterion: " + recipeId + " " + category + " " + type);
+		isTrue(StringUtils.isNotBlank(recipeId), ErrorType.SYSTEM, "Recipe id is null or empty");
+		isTrue(StringUtils.isNotBlank(category), ErrorType.SYSTEM, "Category is null or empty");
+		isTrue(StringUtils.isNotBlank(type), ErrorType.SYSTEM, "Type is null or empty");
+		
+		Recipe existingRecipe = recipeRepository.findById(recipeId);
+		isTrue(existingRecipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+		
+		SearchCriterion criterion = searchCriteriaValidationService.validateCategoryAndType(category, type);
+		existingRecipe.setCriterion(criterion);
+		
+		return recipeRepository.save(existingRecipe);
 	}
 
 	@Override

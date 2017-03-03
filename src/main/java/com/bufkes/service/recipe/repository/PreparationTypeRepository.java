@@ -9,4 +9,6 @@ import com.bufkes.service.recipe.model.PreparationType;
 public interface PreparationTypeRepository extends CrudRepository<PreparationType, Long> {
 
 	public List<PreparationType> findAll();
+	
+	public PreparationType findByName(String name);
 }

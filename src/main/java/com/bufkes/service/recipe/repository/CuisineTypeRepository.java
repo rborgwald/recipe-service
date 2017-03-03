@@ -9,4 +9,6 @@ import com.bufkes.service.recipe.model.CuisineType;
 public interface CuisineTypeRepository extends CrudRepository<CuisineType, Long> {
 
 	public List<CuisineType> findAll();
+	
+	public CuisineType findByName(String name);
 }

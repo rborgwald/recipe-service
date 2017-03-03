@@ -9,4 +9,6 @@ import com.bufkes.service.recipe.model.ProteinType;
 public interface ProteinTypeRepository extends CrudRepository<ProteinType, Long> {
 
 	public List<ProteinType> findAll();
+	
+	public ProteinType findByName(String name);
 }

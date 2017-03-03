@@ -3,6 +3,7 @@ package com.bufkes.service.recipe.controller;
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,7 @@ public class RecipeController {
 	@Autowired
 	private RecipeService recipeService;
 
-	static final Logger logger = LogManager.getLogger(RecipeController.class.getName());
+	static final Logger LOG = LogManager.getLogger(RecipeController.class.getName());
 
 	@RequestMapping(value = "{recipeId}", method = RequestMethod.GET)
 	public Recipe readRecipe(@PathVariable String recipeId) {
@@ -49,6 +50,16 @@ public class RecipeController {
 	@RequestMapping(value = "{recipeId}", method = RequestMethod.DELETE)
 	public void deleteRecipe(@PathVariable String recipeId) {
 		recipeService.deleteRecipe(recipeId);
+	}
+	
+	@RequestMapping(value = "{recipeId}/searchcriteria", method = RequestMethod.PUT)
+	public Recipe addSearchCriterion(@PathVariable String recipeId, @RequestBody Map<String, String> criteria) {
+		for (Map.Entry<String, String> criterion : criteria.entrySet()) {
+			isTrue(StringUtils.isNotBlank(criterion.getKey()), ErrorType.BAD_REQUEST, "No type specified for search category");
+			recipeService.addSearchCriterion(recipeId, criterion.getKey(), criterion.getValue());
+		}
+		
+		return recipeService.getRecipeById(recipeId);
 	}
 	
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)

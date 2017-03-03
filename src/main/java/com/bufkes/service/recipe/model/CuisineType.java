@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cuisine_type_lu")
-public class CuisineType {
+public class CuisineType implements SearchCriterion {
 
 	@Id
 	@Column(name="id", unique=true)
