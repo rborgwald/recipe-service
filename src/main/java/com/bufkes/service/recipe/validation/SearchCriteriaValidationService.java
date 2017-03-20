@@ -59,5 +59,23 @@ public class SearchCriteriaValidationService {
 		
 		return null;
 	}
+	
+	public SearchCriterion validateCategory(String category) {
+		String categoryUpperCase = StringUtils.upperCase(category);
+		
+		if (StringUtils.equals("MEALTYPE", categoryUpperCase)) {
+			return new MealType();
+		} else if (StringUtils.equals("CUISINETYPE", categoryUpperCase)) {
+			return new CuisineType();
+		} else if (StringUtils.equals("PROTEINTYPE", categoryUpperCase)) {
+			return new ProteinType();
+		} else if (StringUtils.equals("PREPARATIONTYPE", categoryUpperCase)) {
+			return new PreparationType();
+		} else {
+			isTrue(false, ErrorType.DATA_VALIDATION, "Not a valid category: " + categoryUpperCase);
+		}
+		
+		return null;
+	}
 
 }

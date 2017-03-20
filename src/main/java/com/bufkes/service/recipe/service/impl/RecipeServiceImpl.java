@@ -71,13 +71,17 @@ public class RecipeServiceImpl implements RecipeService {
 		LOG.info("Adding search criterion: " + recipeId + " " + category + " " + type);
 		isTrue(StringUtils.isNotBlank(recipeId), ErrorType.SYSTEM, "Recipe id is null or empty");
 		isTrue(StringUtils.isNotBlank(category), ErrorType.SYSTEM, "Category is null or empty");
-		isTrue(StringUtils.isNotBlank(type), ErrorType.SYSTEM, "Type is null or empty");
 		
 		Recipe existingRecipe = recipeRepository.findById(recipeId);
 		isTrue(existingRecipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
 		
-		SearchCriterion criterion = searchCriteriaValidationService.validateCategoryAndType(category, type);
-		existingRecipe.setCriterion(criterion);
+		if (StringUtils.isNotBlank(type)) {
+			SearchCriterion criterion = searchCriteriaValidationService.validateCategoryAndType(category, type);
+			existingRecipe.setCriterion(criterion);
+		} else {
+			SearchCriterion criterion = searchCriteriaValidationService.validateCategory(category);
+			existingRecipe.removeCriterion(criterion);
+		}
 		
 		return recipeRepository.save(existingRecipe);
 	}

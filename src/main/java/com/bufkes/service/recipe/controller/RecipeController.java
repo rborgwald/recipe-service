@@ -2,6 +2,7 @@ package com.bufkes.service.recipe.controller;
 
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bufkes.service.recipe.exception.ErrorType;
 import com.bufkes.service.recipe.model.Recipe;
+import com.bufkes.service.recipe.model.SearchCriterion;
 import com.bufkes.service.recipe.service.RecipeService;
 
 @RestController
@@ -60,6 +62,32 @@ public class RecipeController {
 		}
 		
 		return recipeService.getRecipeById(recipeId);
+	}
+	
+	@RequestMapping(value = "{recipeId}/searchcriteria", method = RequestMethod.GET)
+	public Map<String, SearchCriterion> getSearchCriteria(@PathVariable String recipeId) {
+		Recipe recipe = recipeService.getRecipeById(recipeId);
+		isTrue(recipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+		
+		Map<String, SearchCriterion> searchCriteria = new HashMap<String, SearchCriterion>();
+		
+		if (recipe.getMealType() != null) {
+			searchCriteria.put("mealtype", recipe.getMealType());
+		}
+		
+		if (recipe.getCuisineType() != null) {
+			searchCriteria.put("cuisinetype", recipe.getCuisineType());
+		}
+		
+		if (recipe.getProteinType() != null) {
+			searchCriteria.put("proteintype", recipe.getProteinType());
+		}
+		
+		if (recipe.getPreparationType() != null) {
+			searchCriteria.put("preparationtype", recipe.getPreparationType());
+		}
+		
+		return searchCriteria;
 	}
 	
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)

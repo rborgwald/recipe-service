@@ -133,6 +133,18 @@ public class Recipe {
 			this.setPreparationType(type);
 		}
 	}
+	
+	public void removeCriterion(SearchCriterion criterion) {
+		if (criterion instanceof MealType) {
+			this.setMealType(null);
+		} else if (criterion instanceof CuisineType) {
+			this.setCuisineType(null);
+		} else if (criterion instanceof ProteinType) {
+			this.setProteinType(null);
+		} else if (criterion instanceof PreparationType) {
+			this.setPreparationType(null);
+		}
+	}
 
 	@Override
 	public String toString() {
