@@ -1,5 +1,7 @@
 package com.bufkes.service.recipe.service;
 
+import java.util.List;
+
 import com.bufkes.service.recipe.model.Recipe;
 
 public interface RecipeService {
@@ -11,5 +13,22 @@ public interface RecipeService {
 	public Recipe updateRecipe(Recipe recipe);
 
 	public void deleteRecipe(String recipeId);
+	
+	public Recipe addSearchCriterion(String recipeId, String category, String type);
+
+	public List<Recipe> getRecipesByNameLike(String name);
+	
+	public List<Recipe> getRecipesByMealType(String mealType);
+	
+	public List<Recipe> getRecipesByCuisineType(String mealType);
+
+	public List<Recipe> getRecipesByProteinType(String proteinType);
+	
+	public List<Recipe> getRecipesByPreparationType(String preparationType);
+	
+	public List<Recipe> getAllRecipes();
+
+	public List<Recipe> findRecipes(String name, String mealType, String cuisineType, String preparationType,
+			String proteinType);
 
 }
