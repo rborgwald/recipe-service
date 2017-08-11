@@ -30,19 +30,19 @@ public class Recipe {
 
 	private Integer page;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, optional = true)
+	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = true)
 	private MealType mealType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "cuisine_type_id", nullable = true, insertable = true, updatable = true)
 	private CuisineType cuisineType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "preparation_type_id", nullable = true, insertable = true, updatable = true)
 	private PreparationType preparationType;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL}, optional = true)
+	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "protein_type_id", nullable = true, insertable = true, updatable = true)
 	private ProteinType proteinType;
 

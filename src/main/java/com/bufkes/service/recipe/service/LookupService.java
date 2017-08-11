@@ -2,14 +2,19 @@ package com.bufkes.service.recipe.service;
 
 import java.util.List;
 
+import com.bufkes.service.recipe.model.CuisineType;
+import com.bufkes.service.recipe.model.MealType;
+import com.bufkes.service.recipe.model.PreparationType;
+import com.bufkes.service.recipe.model.ProteinType;
+
 public interface LookupService {
 
-	List<String> getMealTypes();
+	List<MealType> getMealTypes();
 	
-	List<String> getCuisineTypes();
+	List<CuisineType> getCuisineTypes();
 	
-	List<String> getProteinTypes();
+	List<ProteinType> getProteinTypes();
 	
-	List<String> getPreparationTypes();
+	List<PreparationType> getPreparationTypes();
 
 }

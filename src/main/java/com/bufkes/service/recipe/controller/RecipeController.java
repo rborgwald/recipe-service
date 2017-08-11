@@ -2,19 +2,27 @@ package com.bufkes.service.recipe.controller;
 
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bufkes.service.recipe.exception.ErrorType;
@@ -43,10 +51,13 @@ public class RecipeController {
 
 	@RequestMapping(value = "{recipeId}", method = RequestMethod.PUT)
 	public Recipe updateRecipe(@PathVariable String recipeId, @RequestBody Recipe recipe) {
+		LOG.info("Incoming recipe: " + recipe);
 		isTrue(recipe != null, ErrorType.BAD_REQUEST, "No details supplied for updating the recipe");
 		isTrue(recipeId.equals(recipe.getId()), ErrorType.DATA_VALIDATION, "Recipe Ids do not match");
 
-		return recipeService.updateRecipe(recipe);
+		Recipe updatedRecipe = recipeService.updateRecipe(recipe);
+		LOG.info("After updating: " + updatedRecipe);
+		return updatedRecipe;
 	}
 
 	@RequestMapping(value = "{recipeId}", method = RequestMethod.DELETE)
@@ -88,6 +99,16 @@ public class RecipeController {
 		}
 		
 		return searchCriteria;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, params={})
+	public List<Recipe> findRecipes(@RequestParam(value = "name", required = false, defaultValue="") String name, 
+			@RequestParam(value = "mealtype", required = false, defaultValue="") String mealType,
+			@RequestParam(value = "cuisinetype", required = false, defaultValue="") String cuisineType, 
+			@RequestParam(value = "preparationtype", required = false, defaultValue="") String preparationType,
+			@RequestParam(value = "proteintype", required = false, defaultValue="") String proteinType) {
+		
+		return recipeService.findRecipes(name, mealType, cuisineType, preparationType, proteinType);
 	}
 	
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)

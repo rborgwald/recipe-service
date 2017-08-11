@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bufkes.service.recipe.model.CuisineType;
+import com.bufkes.service.recipe.model.MealType;
+import com.bufkes.service.recipe.model.PreparationType;
+import com.bufkes.service.recipe.model.ProteinType;
 import com.bufkes.service.recipe.service.LookupService;
 
 @RestController
@@ -21,22 +25,22 @@ public class LookupController {
 	static final Logger logger = LogManager.getLogger(LookupController.class.getName());
 
 	@RequestMapping(value = "/mealtypes", method = RequestMethod.GET)
-	public List<String> getMealTypes() {
+	public List<MealType> getMealTypes() {
 		return lookupService.getMealTypes();
 	}
 
 	@RequestMapping(value = "/cuisinetypes", method = RequestMethod.GET)
-	public List<String> getCuisineTypes() {
+	public List<CuisineType> getCuisineTypes() {
 		return lookupService.getCuisineTypes();
 	}
 	
 	@RequestMapping(value = "/proteintypes", method = RequestMethod.GET)
-	public List<String> getProteinTypes() {
+	public List<ProteinType> getProteinTypes() {
 		return lookupService.getProteinTypes();
 	}
 	
 	@RequestMapping(value = "/preparationtypes", method = RequestMethod.GET)
-	public List<String> getPreparationTypes() {
+	public List<PreparationType> getPreparationTypes() {
 		return lookupService.getPreparationTypes();
 	}
 }

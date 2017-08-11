@@ -2,6 +2,7 @@ package com.bufkes.service.recipe.service.impl;
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +30,7 @@ public class RecipeServiceImpl implements RecipeService {
 	@Autowired
 	private SearchCriteriaValidationService searchCriteriaValidationService;
 	
+	@Transactional
 	public Recipe saveRecipe(Recipe recipe) {
 		isTrue(recipe != null, ErrorType.SYSTEM, "Recipe is null or empty");
 		List<Recipe> existingRecipes = recipeRepository.findByNameIgnoreCase(recipe.getName());
@@ -37,6 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeRepository.save(recipe);
 	}
 
+	@Transactional
 	public Recipe getRecipeById(String id) {
 		isTrue(!StringUtils.isEmpty(id), ErrorType.SYSTEM, "Recipe id is null or empty");
 		Recipe recipe = recipeRepository.findById(id);
@@ -50,13 +53,13 @@ public class RecipeServiceImpl implements RecipeService {
 		}
 	}
 
+	@Transactional
 	public Recipe updateRecipe(Recipe recipe) {
 		isTrue(recipe != null, ErrorType.SYSTEM, "Recipe details not available");
 		Recipe existingRecipe = recipeRepository.findById(recipe.getId());
 		isTrue(existingRecipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
-
-		recipeRepository.save(recipe);
 		
+		recipeRepository.save(recipe);
 		return recipeRepository.findById(recipe.getId());
 	}
 
@@ -119,6 +122,29 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public List<Recipe> getAllRecipes() {
 		 return (List<Recipe>) recipeRepository.findAll();
+	}
+
+	@Override
+	public List<Recipe> findRecipes(String name, String mealType, String cuisineType, String preparationType,
+			String proteinType) {
+		
+		List<Recipe> recipesByName =  StringUtils.isNotBlank(name) ? getRecipesByNameLike(name) : getAllRecipes();
+		
+		List<Recipe> filteredByMealType = StringUtils.isNotBlank(mealType) 
+				? recipesByName.stream().filter(recipe -> recipe.getMealType() != null && StringUtils.equalsIgnoreCase(mealType, recipe.getMealType().getName())).collect(Collectors.toList())
+				: recipesByName; 
+
+		List<Recipe> filteredByCuisineType = StringUtils.isNotBlank(cuisineType)
+				? filteredByMealType.stream().filter(recipe -> recipe.getCuisineType() != null && StringUtils.equalsIgnoreCase(cuisineType, recipe.getCuisineType().getName())).collect(Collectors.toList())
+				: filteredByMealType;
+				
+		List<Recipe> filteredByPreparationType = StringUtils.isNotBlank(preparationType)
+				? filteredByCuisineType.stream().filter(recipe -> recipe.getPreparationType() != null && StringUtils.equalsIgnoreCase(preparationType, recipe.getPreparationType().getName())).collect(Collectors.toList())
+				: filteredByCuisineType;
+				
+		return StringUtils.isNotBlank(proteinType)
+				? filteredByPreparationType.stream().filter(recipe -> recipe.getProteinType() != null && StringUtils.equalsIgnoreCase(proteinType, recipe.getProteinType().getName())).collect(Collectors.toList())
+				: filteredByPreparationType;		
 	}
 
 }

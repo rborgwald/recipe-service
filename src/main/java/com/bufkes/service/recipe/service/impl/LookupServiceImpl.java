@@ -1,6 +1,5 @@
 package com.bufkes.service.recipe.service.impl;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,27 +31,23 @@ public class LookupServiceImpl implements LookupService {
 	private PreparationTypeRepository preparationTypeRepository;
 	
 	@Override
-	public List<String> getMealTypes() {
-		List<MealType> mealTypes = mealTypeRepository.findAll();
-		return mealTypes.stream().map(mealType -> mealType.getName()).collect(Collectors.toList());
+	public List<MealType> getMealTypes() {
+		return mealTypeRepository.findAll();
 	}
 
 	@Override
-	public List<String> getCuisineTypes() {
-		List<CuisineType> cuisineTypes = cuisineTypeRepository.findAll();
-		return cuisineTypes.stream().map(cuisineType -> cuisineType.getName()).collect(Collectors.toList());
+	public List<CuisineType> getCuisineTypes() {
+		return cuisineTypeRepository.findAll();
 	}
 
 	@Override
-	public List<String> getProteinTypes() {
-		List<ProteinType> proteinTypes = proteinTypeRepository.findAll();
-		return proteinTypes.stream().map(proteinType -> proteinType.getName()).collect(Collectors.toList());
+	public List<ProteinType> getProteinTypes() {
+		return proteinTypeRepository.findAll();
 	}
 
 	@Override
-	public List<String> getPreparationTypes() {
-		List<PreparationType> preparationTypes = preparationTypeRepository.findAll();
-		return preparationTypes.stream().map(preparationType -> preparationType.getName()).collect(Collectors.toList());
+	public List<PreparationType> getPreparationTypes() {
+		return preparationTypeRepository.findAll();
 	}
 
 }

@@ -57,7 +57,7 @@ public class LookupServiceImplTest {
 		List<MealType> mealTypes = TestDataBuilder.buildMealTypes();
 		when(mealTypeRepository.findAll()).thenReturn(mealTypes);
 		
-		List<String> types = lookupService.getMealTypes();
+		List<MealType> types = lookupService.getMealTypes();
 		Assert.assertEquals(mealTypes.size(), types.size());
 		
 		verify(mealTypeRepository).findAll();
@@ -68,7 +68,7 @@ public class LookupServiceImplTest {
 		List<CuisineType> cuisineTypes = TestDataBuilder.buildCuisineTypes();
 		when(cuisineTypeRepository.findAll()).thenReturn(cuisineTypes);
 		
-		List<String> types = lookupService.getCuisineTypes();
+		List<CuisineType> types = lookupService.getCuisineTypes();
 		Assert.assertEquals(cuisineTypes.size(), types.size());
 		
 		verify(cuisineTypeRepository).findAll();
@@ -79,7 +79,7 @@ public class LookupServiceImplTest {
 		List<ProteinType> proteinTypes = TestDataBuilder.buildProteinTypes();
 		when(proteinTypeRepository.findAll()).thenReturn(proteinTypes);
 		
-		List<String> types = lookupService.getProteinTypes();
+		List<ProteinType> types = lookupService.getProteinTypes();
 		Assert.assertEquals(proteinTypes.size(), types.size());
 		
 		verify(proteinTypeRepository).findAll();
@@ -90,7 +90,7 @@ public class LookupServiceImplTest {
 		List<PreparationType> preparationTypes = TestDataBuilder.buildPreparationTypes();
 		when(preparationTypeRepository.findAll()).thenReturn(preparationTypes);
 		
-		List<String> types = lookupService.getPreparationTypes();
+		List<PreparationType> types = lookupService.getPreparationTypes();
 		Assert.assertEquals(preparationTypes.size(), types.size());
 		
 		verify(preparationTypeRepository).findAll();

@@ -28,4 +28,7 @@ public interface RecipeService {
 	
 	public List<Recipe> getAllRecipes();
 
+	public List<Recipe> findRecipes(String name, String mealType, String cuisineType, String preparationType,
+			String proteinType);
+
 }
