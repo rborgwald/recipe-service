@@ -13,15 +13,9 @@
   
   <properties>
         <java.version>1.8</java.version>
-        <recipe.ui.version>1.0-SNAPSHOT</recipe.ui.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.bufkes.recipe</groupId>
-            <artifactId>recipe-ui</artifactId>
-            <version>${recipe.ui.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
