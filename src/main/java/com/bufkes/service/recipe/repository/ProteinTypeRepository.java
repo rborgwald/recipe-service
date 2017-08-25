@@ -11,4 +11,12 @@ public interface ProteinTypeRepository extends CrudRepository<ProteinType, Long>
 	public List<ProteinType> findAll();
 	
 	public ProteinType findByName(String name);
+	
+	public ProteinType findById(Integer id);
+	
+	List<ProteinType> findByNameIgnoreCase(String name);
+	
+	public ProteinType findFirstByOrderByIdDesc();
+
+	public void deleteById(Integer id);
 }

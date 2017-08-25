@@ -28,4 +28,12 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 	
 	@Query("SELECT r FROM Recipe r inner join r.preparationType pt WHERE pt.name = ?1")
 	List<Recipe> findByPreparationTypeName(String name);
+
+	List<Recipe> findByMealTypeId(Integer id);
+	
+	List<Recipe> findByCuisineTypeId(Integer id);
+	
+	List<Recipe> findByProteinTypeId(Integer id);
+	
+	List<Recipe> findByPreparationTypeId(Integer id);
 }

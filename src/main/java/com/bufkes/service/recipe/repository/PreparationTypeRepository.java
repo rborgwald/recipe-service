@@ -11,4 +11,12 @@ public interface PreparationTypeRepository extends CrudRepository<PreparationTyp
 	public List<PreparationType> findAll();
 	
 	public PreparationType findByName(String name);
+	
+	public PreparationType findById(Integer id);
+	
+	List<PreparationType> findByNameIgnoreCase(String name);
+	
+	public PreparationType findFirstByOrderByIdDesc();
+	
+	public void deleteById(Integer id);
 }
