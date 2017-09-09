@@ -17,4 +17,27 @@ public interface LookupService {
 	
 	List<PreparationType> getPreparationTypes();
 
+	MealType saveMealType(MealType mealType);
+	
+	CuisineType saveCuisineType(CuisineType cuisineType);
+	
+	ProteinType saveProteinType(ProteinType proteinType);
+
+	PreparationType savePreparationType(PreparationType preparationType);
+
+	void deleteMealType(Integer id);
+	
+	void deleteCuisineType(Integer id);
+	
+	void deleteProteinType(Integer id);
+	
+	void deletePreparationType(Integer id);
+
+	MealType updateMealType(MealType mealType);
+
+	CuisineType updateCuisineType(CuisineType cuisineType);
+
+	ProteinType updateProteinType(ProteinType proteinType);
+
+	PreparationType updatePreparationType(PreparationType preparationType);
 }
