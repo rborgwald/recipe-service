@@ -32,4 +32,12 @@ public interface LookupService {
 	void deleteProteinType(Integer id);
 	
 	void deletePreparationType(Integer id);
+
+	MealType updateMealType(MealType mealType);
+
+	CuisineType updateCuisineType(CuisineType cuisineType);
+
+	ProteinType updateProteinType(ProteinType proteinType);
+
+	PreparationType updatePreparationType(PreparationType preparationType);
 }

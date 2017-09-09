@@ -12,6 +12,7 @@ import com.bufkes.service.recipe.model.CuisineType;
 import com.bufkes.service.recipe.model.MealType;
 import com.bufkes.service.recipe.model.PreparationType;
 import com.bufkes.service.recipe.model.ProteinType;
+import com.bufkes.service.recipe.model.Recipe;
 import com.bufkes.service.recipe.repository.CuisineTypeRepository;
 import com.bufkes.service.recipe.repository.MealTypeRepository;
 import com.bufkes.service.recipe.repository.PreparationTypeRepository;
@@ -61,6 +62,16 @@ public class LookupServiceImpl implements LookupService {
 		return mealTypeRepository.save(mealType);
 	}
 	
+	@Override
+	public MealType updateMealType(MealType mealType) {
+		isTrue(mealType != null, ErrorType.SYSTEM, "Meal type details not available");
+		MealType existingType = mealTypeRepository.findById(mealType.getId());
+		isTrue(existingType != null, ErrorType.NO_DATA_FOUND, "Meal type not found");
+		
+		mealTypeRepository.save(mealType);
+		return mealTypeRepository.findById(mealType.getId());
+	}
+	
 	@Transactional
 	public void deleteMealType(Integer id) {
 		isTrue(id != null, ErrorType.SYSTEM, "Meal type id is null");
@@ -92,6 +103,16 @@ public class LookupServiceImpl implements LookupService {
 		return cuisineTypeRepository.save(type);
 	}
 	
+	@Override
+	public CuisineType updateCuisineType(CuisineType cuisineType) {
+		isTrue(cuisineType != null, ErrorType.SYSTEM, "Cuisine type details not available");
+		CuisineType existingType = cuisineTypeRepository.findById(cuisineType.getId());
+		isTrue(existingType != null, ErrorType.NO_DATA_FOUND, "Cuisine type not found");
+		
+		cuisineTypeRepository.save(cuisineType);
+		return cuisineTypeRepository.findById(cuisineType.getId());
+	}
+	
 	@Transactional
 	public void deleteCuisineType(Integer id) {
 		isTrue(id != null, ErrorType.SYSTEM, "Cuisine type id is null");
@@ -121,6 +142,16 @@ public class LookupServiceImpl implements LookupService {
 		
 		type.setId(newId);
 		return proteinTypeRepository.save(type);
+	}
+	
+	@Override
+	public ProteinType updateProteinType(ProteinType proteinType) {
+		isTrue(proteinType != null, ErrorType.SYSTEM, "Protein type details not available");
+		ProteinType existingType = proteinTypeRepository.findById(proteinType.getId());
+		isTrue(existingType != null, ErrorType.NO_DATA_FOUND, "Protein type not found");
+		
+		proteinTypeRepository.save(proteinType);
+		return proteinTypeRepository.findById(proteinType.getId());
 	}
 	
 	@Transactional
@@ -160,6 +191,16 @@ public class LookupServiceImpl implements LookupService {
 		isTrue(preparationTypeRepository.findById(id) != null, ErrorType.SYSTEM, "No preparation type found with id: " + id);
 		isTrue(recipeRepository.findByPreparationTypeId(id).isEmpty(), ErrorType.SYSTEM, "Cannot delete preparation type - it is referenced by recipes");
 		preparationTypeRepository.deleteById(id);
+	}
+
+	@Override
+	public PreparationType updatePreparationType(PreparationType preparationType) {
+		isTrue(preparationType != null, ErrorType.SYSTEM, "Preparation type details not available");
+		PreparationType existingType = preparationTypeRepository.findById(preparationType.getId());
+		isTrue(existingType != null, ErrorType.NO_DATA_FOUND, "Preparation type not found");
+		
+		preparationTypeRepository.save(preparationType);
+		return preparationTypeRepository.findById(preparationType.getId());
 	}
 
 }
