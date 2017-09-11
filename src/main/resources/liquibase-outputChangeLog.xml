@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="trkb3 (generated)" id="1505052282582-1">
+        <createSequence sequenceName="hibernate_sequence"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-2">
+        <createTable tableName="cuisine_type_lu">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-3">
+        <createTable tableName="meal_type_lu">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-4">
+        <createTable tableName="preparation_type_lu">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-5">
+        <createTable tableName="protein_type_lu">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2044)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-6">
+        <createTable tableName="recipe">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="page" type="INT"/>
+            <column name="source" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="volume" type="VARCHAR(255)"/>
+            <column name="meal_type_id" type="INT"/>
+            <column name="cuisine_type_id" type="INT"/>
+            <column name="protein_type_id" type="INT"/>
+            <column name="preparation_type_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-7">
+        <addPrimaryKey columnNames="id" constraintName="cuisine_type_lu_pkey" tableName="cuisine_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-8">
+        <addPrimaryKey columnNames="id" constraintName="preparation_type_lu_pkey" tableName="preparation_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-9">
+        <addPrimaryKey columnNames="id" constraintName="protein_type_lu_pkey" tableName="protein_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-10">
+        <addPrimaryKey columnNames="id" constraintName="recipe_pkey" tableName="recipe"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-11">
+        <addPrimaryKey columnNames="id" constraintName="unique_id" tableName="meal_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-12">
+        <addForeignKeyConstraint baseColumnNames="cuisine_type_id" baseTableName="recipe" constraintName="lnk_cuisine_type_lu_recipe" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="cuisine_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-13">
+        <addForeignKeyConstraint baseColumnNames="meal_type_id" baseTableName="recipe" constraintName="lnk_meal_type_lu_recipe" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="meal_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-14">
+        <addForeignKeyConstraint baseColumnNames="preparation_type_id" baseTableName="recipe" constraintName="lnk_preparation_type_lu_recipe" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="preparation_type_lu"/>
+    </changeSet>
+    <changeSet author="trkb3 (generated)" id="1505052282582-15">
+        <addForeignKeyConstraint baseColumnNames="protein_type_id" baseTableName="recipe" constraintName="lnk_protein_type_lu_recipe" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="protein_type_lu"/>
+    </changeSet>
+</databaseChangeLog>

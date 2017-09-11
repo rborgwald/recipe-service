@@ -1,6 +1,5 @@
 package com.bufkes.service.recipe.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,6 +28,8 @@ public class Recipe {
 	private String volume;
 
 	private Integer page;
+	
+	private String notes;
 
 	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = true)
@@ -84,6 +85,14 @@ public class Recipe {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	public MealType getMealType() {
@@ -149,7 +158,7 @@ public class Recipe {
 	@Override
 	public String toString() {
 		return "Recipe [id=" + id + ", name=" + name + ", source=" + source + ", volume=" + volume + ", page=" + page
-				+ ", mealType=" + mealType + ", cuisineType=" + cuisineType + ", preparationType="
+				+ ", notes=" + notes + ", mealType=" + mealType + ", cuisineType=" + cuisineType + ", preparationType="
 				+ preparationType + ", proteinType=" + proteinType + "]";
 	}
 
