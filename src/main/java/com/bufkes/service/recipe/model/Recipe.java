@@ -30,6 +30,11 @@ public class Recipe {
 	private Integer page;
 	
 	private String notes;
+	
+	private Integer stars;
+	
+	@Column(name = "new")
+	private Boolean newRecipe;
 
 	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "meal_type_id", nullable = true, insertable = true, updatable = true)
@@ -93,6 +98,22 @@ public class Recipe {
 	
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+	
+	public Integer getStars() {
+		return stars;
+	}
+	
+	public void setStars(Integer stars) {
+		this.stars = stars;
+	}
+	
+	public Boolean getNewRecipe() {
+		return newRecipe;
+	}
+	
+	public void setNewRecipe(Boolean newRecipe) {
+		this.newRecipe = newRecipe;
 	}
 
 	public MealType getMealType() {
@@ -158,9 +179,9 @@ public class Recipe {
 	@Override
 	public String toString() {
 		return "Recipe [id=" + id + ", name=" + name + ", source=" + source + ", volume=" + volume + ", page=" + page
-				+ ", notes=" + notes + ", mealType=" + mealType + ", cuisineType=" + cuisineType + ", preparationType="
-				+ preparationType + ", proteinType=" + proteinType + "]";
+				+ ", notes=" + notes + ", stars=" + stars + ", newRecipe=" + newRecipe + ", mealType=" + mealType
+				+ ", cuisineType=" + cuisineType + ", preparationType=" + preparationType + ", proteinType="
+				+ proteinType + "]";
 	}
 
-	
 }

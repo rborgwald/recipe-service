@@ -2,22 +2,15 @@ package com.bufkes.service.recipe.controller;
 
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,9 +99,11 @@ public class RecipeController {
 			@RequestParam(value = "mealtype", required = false, defaultValue="") String mealType,
 			@RequestParam(value = "cuisinetype", required = false, defaultValue="") String cuisineType, 
 			@RequestParam(value = "preparationtype", required = false, defaultValue="") String preparationType,
-			@RequestParam(value = "proteintype", required = false, defaultValue="") String proteinType) {
+			@RequestParam(value = "proteintype", required = false, defaultValue="") String proteinType,
+			@RequestParam(value = "stars", required = false, defaultValue = "") Integer stars,
+			@RequestParam(value = "new", required = false, defaultValue = "") Boolean newRecipe) {
 		
-		return recipeService.findRecipes(name, mealType, cuisineType, preparationType, proteinType);
+		return recipeService.findRecipes(name, mealType, cuisineType, preparationType, proteinType, stars, newRecipe);
 	}
 	
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)

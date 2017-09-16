@@ -33,8 +33,11 @@ public class RecipeServiceImpl implements RecipeService {
 	@Transactional
 	public Recipe saveRecipe(Recipe recipe) {
 		isTrue(recipe != null, ErrorType.SYSTEM, "Recipe is null or empty");
+		
 		List<Recipe> existingRecipes = recipeRepository.findByNameIgnoreCase(recipe.getName());
+		
 		isTrue(existingRecipes.size() == 0, ErrorType.DATA_VALIDATION, "Recipe with same name already exists: " + recipe.getName());
+		isTrue(recipe.getStars() == null || (recipe.getStars() > 0 && recipe.getStars() <= 3), ErrorType.DATA_VALIDATION, "Recipe stars should be between 1 - 3");
 		
 		return recipeRepository.save(recipe);
 	}
@@ -56,9 +59,12 @@ public class RecipeServiceImpl implements RecipeService {
 	@Transactional
 	public Recipe updateRecipe(Recipe recipe) {
 		isTrue(recipe != null, ErrorType.SYSTEM, "Recipe details not available");
-		Recipe existingRecipe = recipeRepository.findById(recipe.getId());
-		isTrue(existingRecipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
 		
+		Recipe existingRecipe = recipeRepository.findById(recipe.getId());
+		
+		isTrue(existingRecipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+		isTrue(recipe.getStars() == null || (recipe.getStars() > 0 && recipe.getStars() <= 3), ErrorType.DATA_VALIDATION, "Recipe stars should be between 1 - 3");
+
 		recipeRepository.save(recipe);
 		return recipeRepository.findById(recipe.getId());
 	}
@@ -126,7 +132,7 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public List<Recipe> findRecipes(String name, String mealType, String cuisineType, String preparationType,
-			String proteinType) {
+			String proteinType, Integer stars, Boolean newRecipe) {
 		
 		List<Recipe> recipesByName =  StringUtils.isNotBlank(name) ? getRecipesByNameLike(name) : getAllRecipes();
 		
@@ -142,9 +148,17 @@ public class RecipeServiceImpl implements RecipeService {
 				? filteredByCuisineType.stream().filter(recipe -> recipe.getPreparationType() != null && StringUtils.equalsIgnoreCase(preparationType, recipe.getPreparationType().getName())).collect(Collectors.toList())
 				: filteredByCuisineType;
 				
-		return StringUtils.isNotBlank(proteinType)
+		List<Recipe> filteredByProteinType = StringUtils.isNotBlank(proteinType)
 				? filteredByPreparationType.stream().filter(recipe -> recipe.getProteinType() != null && StringUtils.equalsIgnoreCase(proteinType, recipe.getProteinType().getName())).collect(Collectors.toList())
-				: filteredByPreparationType;		
+				: filteredByPreparationType;
+				
+		List<Recipe> filteredByStars = stars != null
+				? filteredByProteinType.stream().filter(recipe -> recipe.getStars() != null && recipe.getStars() >= stars).collect(Collectors.toList())
+				: filteredByProteinType;
+				
+		return newRecipe != null
+				? filteredByStars.stream().filter(recipe -> recipe.getNewRecipe() != null && recipe.getNewRecipe() == newRecipe).collect(Collectors.toList())
+				: filteredByStars;		
 	}
 
 }
