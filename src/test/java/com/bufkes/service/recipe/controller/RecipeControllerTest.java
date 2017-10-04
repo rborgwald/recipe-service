@@ -27,6 +27,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.bufkes.service.recipe.exception.ErrorType;
 import com.bufkes.service.recipe.exception.ServiceException;
@@ -43,6 +45,8 @@ public class RecipeControllerTest {
 	private RecipeService recipeService;
 	
 	@Autowired
+	private WebApplicationContext context;
+
 	private MockMvc mvc;
 	
 	private RecipeController recipeController;
@@ -53,6 +57,7 @@ public class RecipeControllerTest {
 	
 	@Before
 	public void setup() {
+		mvc = MockMvcBuilders.webAppContextSetup(context).build();
 		recipeController = new RecipeController();
 		TestUtil.setField(recipeController, "recipeService", recipeService);
 	}
