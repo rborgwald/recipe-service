@@ -20,4 +20,4 @@ CREATE TABLE user_account (
 );
 
 INSERT INTO user_account (id, username, password) VALUES (1, 'rborgwald', '$2a$10$W5ZU6AeVBR5UABt6uRYeq.1iBUV.xwtk9ELnwfVMoAysdZXIebw2m');
-INSERT INTO user_account (id, username, password) VALUES (2, 'jufkes', '$2a$10$X4qWks/jhBBgyOjxXpgKLujdlQOzfk/xTLSHFyYgE8tRxVfTAXjwG');
+INSERT INTO user_account (id, username, password) VALUES (2, 'chasersax1', '$2a$10$nRn2FdlIzK0sXWtWWRK.T.8lVA5afHFG6ucz9BnArDkyNprRq4v1u');
