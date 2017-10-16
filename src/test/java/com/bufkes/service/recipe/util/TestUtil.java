@@ -9,7 +9,7 @@ import java.util.Date;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.ReflectionUtils;
 
-import com.bufkes.service.recipe.security.user.User;
+import com.bufkes.service.recipe.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;

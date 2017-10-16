@@ -1,4 +1,4 @@
-package com.bufkes.service.recipe.security.user;
+package com.bufkes.service.recipe.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

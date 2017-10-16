@@ -9,7 +9,7 @@ import com.bufkes.service.recipe.model.MealType;
 import com.bufkes.service.recipe.model.PreparationType;
 import com.bufkes.service.recipe.model.ProteinType;
 import com.bufkes.service.recipe.model.Recipe;
-import com.bufkes.service.recipe.security.user.User;
+import com.bufkes.service.recipe.model.User;
 
 public class TestDataBuilder {
 
