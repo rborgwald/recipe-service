@@ -9,6 +9,7 @@ import com.bufkes.service.recipe.model.MealType;
 import com.bufkes.service.recipe.model.PreparationType;
 import com.bufkes.service.recipe.model.ProteinType;
 import com.bufkes.service.recipe.model.Recipe;
+import com.bufkes.service.recipe.model.User;
 
 public class TestDataBuilder {
 
@@ -113,4 +114,12 @@ public class TestDataBuilder {
         
         return preparationType;
 	}
+
+	public static User buildUser() {
+        User userDetails = new User();
+        userDetails.setId(1L);
+        userDetails.setUsername("username");
+        userDetails.setPassword("password");
+        return userDetails;
+    }
 }

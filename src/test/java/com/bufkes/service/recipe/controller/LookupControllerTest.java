@@ -17,6 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.bufkes.service.recipe.model.CuisineType;
 import com.bufkes.service.recipe.model.MealType;
@@ -29,79 +31,74 @@ import com.bufkes.service.recipe.util.TestUtil;
 @RunWith(SpringRunner.class)
 @WebMvcTest(LookupController.class)
 public class LookupControllerTest {
-	
+
 	@MockBean
 	private LookupService lookupService;
-	
+
 	@Autowired
+	private WebApplicationContext context;
+
 	private MockMvc mvc;
-	
+
 	private LookupController lookupController;
-	
+
 	public LookupControllerTest() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Before
 	public void setup() {
+		mvc = MockMvcBuilders.webAppContextSetup(context).build();
 		lookupController = new LookupController();
 		TestUtil.setField(lookupController, "lookupService", lookupService);
 	}
 
 	@Test
-    public void testGetMealTypes() throws Exception {
-		
+	public void testGetMealTypes() throws Exception {
+
 		MealType mealType = TestDataBuilder.buildMealType();
+		when(lookupService.getMealTypes()).thenReturn(Arrays.asList(mealType));
+ 
+		MvcResult result = this.mvc.perform(get("/api/lookup/mealtypes")).andReturn();
 
-        when(lookupService.getMealTypes()).thenReturn(Arrays.asList(mealType));
+		assertThat(result.getResponse().getStatus()).isEqualTo(200);
+		verify(lookupService).getMealTypes();
+	}
 
-        MvcResult result = this.mvc.perform(get("/api/lookup/mealtypes")).andReturn();
-
-        assertThat(result.getResponse().getStatus()).isEqualTo(200);
-
-        verify(lookupService).getMealTypes();
-    }
-	
 	@Test
-    public void testGetCuisineTypes() throws Exception {
-		
+	public void testGetCuisineTypes() throws Exception {
+
 		CuisineType cuisineType = TestDataBuilder.buildCuisineType();
+		when(lookupService.getCuisineTypes()).thenReturn(Arrays.asList(cuisineType));
 
-        when(lookupService.getCuisineTypes()).thenReturn(Arrays.asList(cuisineType));
+		MvcResult result = this.mvc.perform(get("/api/lookup/cuisinetypes")).andReturn();
 
-        MvcResult result = this.mvc.perform(get("/api/lookup/cuisinetypes")).andReturn();
+		assertThat(result.getResponse().getStatus()).isEqualTo(200);
+		verify(lookupService).getCuisineTypes();
+	}
 
-        assertThat(result.getResponse().getStatus()).isEqualTo(200);
-
-        verify(lookupService).getCuisineTypes();
-    }
-	
 	@Test
-    public void testGetProteinTypes() throws Exception {
-		
+	public void testGetProteinTypes() throws Exception {
+
 		ProteinType proteinType = TestDataBuilder.buildProteinType();
+		when(lookupService.getProteinTypes()).thenReturn(Arrays.asList(proteinType));
 
-        when(lookupService.getProteinTypes()).thenReturn(Arrays.asList(proteinType));
+		MvcResult result = this.mvc.perform(get("/api/lookup/proteintypes")).andReturn();
 
-        MvcResult result = this.mvc.perform(get("/api/lookup/proteintypes")).andReturn();
+		assertThat(result.getResponse().getStatus()).isEqualTo(200);
+		verify(lookupService).getProteinTypes();
+	}
 
-        assertThat(result.getResponse().getStatus()).isEqualTo(200);
-
-        verify(lookupService).getProteinTypes();
-    }
-	
 	@Test
-    public void testGetPreparationTypes() throws Exception {
-		
+	public void testGetPreparationTypes() throws Exception {
+
 		PreparationType preparationType = TestDataBuilder.buildPreparationType();
+		when(lookupService.getPreparationTypes()).thenReturn(Arrays.asList(preparationType));
 
-        when(lookupService.getPreparationTypes()).thenReturn(Arrays.asList(preparationType));
+		MvcResult result = this.mvc.perform(get("/api/lookup/preparationtypes")).andReturn();
 
-        MvcResult result = this.mvc.perform(get("/api/lookup/preparationtypes")).andReturn();
-
-        assertThat(result.getResponse().getStatus()).isEqualTo(200);
-
-        verify(lookupService).getPreparationTypes();
-    }
+		assertThat(result.getResponse().getStatus()).isEqualTo(200);
+		verify(lookupService).getPreparationTypes();
+	}
 
 }

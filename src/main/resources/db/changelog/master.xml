@@ -4,4 +4,5 @@
     <include file="db/changelog/init_db/ddl.changelog.xml"/>
     <include file="db/changelog/add_notes/ddl.changelog.xml"/>
     <include file="db/changelog/add_stars/ddl.changelog.xml"/>
+    <include file="db/changelog/user_table/ddl.changelog.xml"/>
 </databaseChangeLog>
