@@ -6,4 +6,6 @@ import com.bufkes.service.recipe.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     public User findByUsernameIgnoreCase(String username);
+
+    User findById(long userId);
 }
