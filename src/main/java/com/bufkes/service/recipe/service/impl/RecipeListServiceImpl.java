@@ -8,6 +8,7 @@ import com.bufkes.service.recipe.service.RecipeListService;
 import com.bufkes.service.recipe.service.RecipeService;
 import com.bufkes.service.recipe.util.Assert;
 import com.bufkes.service.recipe.validation.SearchCriteriaValidationService;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,7 +80,15 @@ public class RecipeListServiceImpl implements RecipeListService {
             recipeListPermissionRepository.save(recipeListPermission);
         }
 
+        recipeList = recipeListRepository.findById(recipeList.getId());
+        recipeList.setUsers(Sets.newHashSet(user));
         return recipeList;
+    }
+
+    @Override
+    public List<User> getUsersForRecipeList(String recipeListId) {
+        List<RecipeListPermission> permissions = recipeListPermissionRepository.findByRecipeListId(recipeListId);
+        return permissions.stream().map(permission -> permission.getUser()).collect(Collectors.toList());
     }
 
     @Override
@@ -101,8 +110,10 @@ public class RecipeListServiceImpl implements RecipeListService {
         recipeListRepository.delete(recipeList);
     }
 
+
+
     @Override
-    public RecipeListMapping addRecipeToList(String recipeListId, String recipeId) {
+    public RecipeList addRecipeToList(String recipeListId, String recipeId) {
         RecipeList recipeList = recipeListRepository.findById(recipeListId);
         Assert.isTrue(recipeList != null, ErrorType.NO_DATA_FOUND, "Recipe list not found");
         RecipeListMapping recipeListMapping = recipeListMappingRepository.findByRecipeListIdAndRecipeId(recipeListId, recipeId);
@@ -112,14 +123,15 @@ public class RecipeListServiceImpl implements RecipeListService {
             recipeListMapping = new RecipeListMapping();
             recipeListMapping.setRecipeList(recipeList);
             recipeListMapping.setRecipe(recipe);
-            return recipeListMappingRepository.save(recipeListMapping);
+            recipeListMapping = recipeListMappingRepository.save(recipeListMapping);
+            return recipeListMapping.getRecipeList();
         } else {
-            return recipeListMapping;
+            return recipeListMapping.getRecipeList();
         }
     }
 
     @Override
-    public RecipeListPermission addUserToRecipeList(String recipeListId, long userId) {
+    public RecipeList addUserToRecipeList(String recipeListId, long userId) {
         RecipeList recipeList = recipeListRepository.findById(recipeListId);
         Assert.isTrue(recipeList != null, ErrorType.NO_DATA_FOUND, "Recipe list not found");
         RecipeListPermission permission = recipeListPermissionRepository.findByUserIdAndRecipeListId(userId, recipeListId);
@@ -129,9 +141,10 @@ public class RecipeListServiceImpl implements RecipeListService {
             permission = new RecipeListPermission();
             permission.setUser(user);
             permission.setRecipeList(recipeList);
-            return recipeListPermissionRepository.save(permission);
+            permission = recipeListPermissionRepository.save(permission);
+            return permission.getRecipeList();
         } else {
-            return permission;
+            return permission.getRecipeList();
         }
     }
 
@@ -139,8 +152,10 @@ public class RecipeListServiceImpl implements RecipeListService {
     public void removeUserFromList(String recipeListId, long userId) {
         RecipeList recipeList = recipeListRepository.findById(recipeListId);
         Assert.isTrue(recipeList != null, ErrorType.NO_DATA_FOUND, "Recipe list not found");
+        List<RecipeListPermission> allPermissions = recipeListPermissionRepository.findByRecipeListId(recipeListId);
         RecipeListPermission permission = recipeListPermissionRepository.findByUserIdAndRecipeListId(userId, recipeListId);
         if (permission != null) {
+            Assert.isTrue(allPermissions.size() > 1, "Could not remove user - no other users associated with recipe list");
             recipeListPermissionRepository.delete(permission);
         }
     }

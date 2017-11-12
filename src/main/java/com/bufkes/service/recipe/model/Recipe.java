@@ -1,15 +1,12 @@
 package com.bufkes.service.recipe.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipe")
@@ -51,6 +48,11 @@ public class Recipe {
 	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "protein_type_id", nullable = true, insertable = true, updatable = true)
 	private ProteinType proteinType;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "recipe_list_mapping", joinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "recipe_list_id", referencedColumnName = "id"))
+	@JsonIgnore
+	private Set<RecipeList> recipeLists;
 
 	public String getId() {
 		return id;

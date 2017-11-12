@@ -1,9 +1,6 @@
 package com.bufkes.service.recipe.service;
 
-import com.bufkes.service.recipe.model.Recipe;
-import com.bufkes.service.recipe.model.RecipeList;
-import com.bufkes.service.recipe.model.RecipeListMapping;
-import com.bufkes.service.recipe.model.RecipeListPermission;
+import com.bufkes.service.recipe.model.*;
 
 import java.util.List;
 
@@ -20,11 +17,13 @@ public interface RecipeListService {
 
     void deleteRecipeList(String id);
 
-    RecipeListMapping addRecipeToList(String recipeListId, String recipeId);
+    List<User> getUsersForRecipeList(String recipeListId);
+
+    RecipeList addRecipeToList(String recipeListId, String recipeId);
 
     void removeRecipeFromList(String recipeListId, String recipeId);
 
-    RecipeListPermission addUserToRecipeList(String recipeListId, long userId);
+    RecipeList addUserToRecipeList(String recipeListId, long userId);
 
     void removeUserFromList(String recipeListId, long userId);
 }

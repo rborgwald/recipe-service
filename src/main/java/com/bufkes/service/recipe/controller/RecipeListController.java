@@ -28,8 +28,9 @@ public class RecipeListController {
 
 	@GetMapping()
 	public List<RecipeList> getRecipeListsForUser(@RequestParam(value = "username") String username) {
-		return recipeListService.getRecipeListsForUser(username);
-	}
+        List<RecipeList> recipeListsForUser = recipeListService.getRecipeListsForUser(username);
+        return recipeListsForUser;
+    }
 
 	@PostMapping()
     public RecipeList createRecipeList(@RequestBody RecipeList recipeList) {
@@ -47,12 +48,17 @@ public class RecipeListController {
     }
 
     @PutMapping("/{recipeListId}/recipes/{recipeId}")
-    public RecipeListMapping addRecipeToList(@PathVariable String recipeListId, @PathVariable String recipeId) {
+    public RecipeList addRecipeToList(@PathVariable String recipeListId, @PathVariable String recipeId) {
 	    return recipeListService.addRecipeToList(recipeListId, recipeId);
     }
 
+    @GetMapping("/{recipeListId}/users")
+    public List<User> getUserPermissionsForRecipeList(@PathVariable String recipeListId) {
+	    return recipeListService.getUsersForRecipeList(recipeListId);
+    }
+
     @PutMapping("/{recipeListId}/users/{userId}")
-    public RecipeListPermission addUserPermissionToRecipeList(@PathVariable String recipeListId, @PathVariable long userId) {
+    public RecipeList addUserPermissionToRecipeList(@PathVariable String recipeListId, @PathVariable long userId) {
 	    return recipeListService.addUserToRecipeList(recipeListId, userId);
     }
 
