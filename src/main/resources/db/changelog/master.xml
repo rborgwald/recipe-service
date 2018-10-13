@@ -6,4 +6,5 @@
     <include file="db/changelog/add_stars/ddl.changelog.xml"/>
     <include file="db/changelog/user_table/ddl.changelog.xml"/>
     <include file="db/changelog/recipe_list/ddl.changelog.xml"/>
+    <include file="db/changelog/add_url/ddl.changelog.xml"/>
 </databaseChangeLog>

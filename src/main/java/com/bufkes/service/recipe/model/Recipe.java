@@ -54,6 +54,8 @@ public class Recipe {
 	@JsonIgnore
 	private Set<RecipeList> recipeLists;
 
+	private String url;
+
 	public String getId() {
 		return id;
 	}
@@ -149,7 +151,16 @@ public class Recipe {
 	public void setProteinType(ProteinType proteinType) {
 		this.proteinType = proteinType;
 	}
-	
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+
 	public void setCriterion(SearchCriterion criterion) {
 		if (criterion instanceof MealType) {
 			MealType type = (MealType) criterion;
