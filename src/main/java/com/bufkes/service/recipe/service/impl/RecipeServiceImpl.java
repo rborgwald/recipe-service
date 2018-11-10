@@ -1,13 +1,18 @@
 package com.bufkes.service.recipe.service.impl;
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.io.ByteStreams;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +22,7 @@ import com.bufkes.service.recipe.model.SearchCriterion;
 import com.bufkes.service.recipe.repository.RecipeRepository;
 import com.bufkes.service.recipe.service.RecipeService;
 import com.bufkes.service.recipe.validation.SearchCriteriaValidationService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Component("recipeService")
@@ -29,6 +35,9 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	@Autowired
 	private SearchCriteriaValidationService searchCriteriaValidationService;
+
+	@Value("${directory.images}")
+	private String imagesDirectory;
 	
 	@Transactional
 	public Recipe saveRecipe(Recipe recipe) {
@@ -161,4 +170,90 @@ public class RecipeServiceImpl implements RecipeService {
 				: filteredByStars;		
 	}
 
+
+	@Override
+	public Recipe addImage(String recipeId, MultipartFile file) {
+		Recipe recipe = recipeRepository.findById(recipeId);
+
+		isTrue(recipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+
+		String previousFilename = recipe.getImageFilename();
+
+		String fileName = recipe.getId() + "-" + System.currentTimeMillis() + "." + file.getOriginalFilename().split("\\.")[1];
+		String path = imagesDirectory + fileName;
+		try {
+			byte[] bytes = file.getBytes();
+			BufferedOutputStream stream =
+					new BufferedOutputStream(new FileOutputStream(new File(path)));
+			stream.write(bytes);
+			stream.close();
+		} catch (Exception e) {
+			LOG.error("Error saving image: " + e.getMessage());
+			isTrue(false, ErrorType.SYSTEM, "Unable to save image");
+		}
+
+		recipe.setImageFilename(fileName);
+		recipeRepository.save(recipe);
+
+		LOG.info("Successfully saved image to " + path);
+
+		if (StringUtils.isNotBlank(previousFilename)) {
+			File previousFile = new File(imagesDirectory + previousFilename);
+
+			if(previousFile.delete()) {
+				LOG.info("Previous file successfully deleted: " + previousFilename);
+			} else {
+				LOG.info("Previous file not deleted: " + previousFilename);
+			}
+		}
+
+		return recipeRepository.findById(recipe.getId());
+	}
+
+	@Override
+	public byte[] getImage(String recipeId) throws IOException {
+		Recipe recipe = recipeRepository.findById(recipeId);
+
+		isTrue(recipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+
+		String filename = recipe.getImageFilename();
+
+		isTrue(StringUtils.isNotBlank(filename), ErrorType.NO_DATA_FOUND, "No image found for recipe");
+
+		String path = imagesDirectory + filename;
+
+		try {
+			return Files.readAllBytes(new File(path).toPath());
+		} catch (Exception e) {
+			LOG.error("Error getting file: ", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Override
+	public Recipe deleteImage(String recipeId) {
+		Recipe recipe = recipeRepository.findById(recipeId);
+
+		isTrue(recipe != null, ErrorType.NO_DATA_FOUND, "Recipe not found");
+
+		String filename = recipe.getImageFilename();
+
+		if (StringUtils.isNotBlank(filename)) {
+			// Delete image file
+			File file = new File(imagesDirectory + filename);
+
+			if(file.delete()) {
+				LOG.info("File successfully deleted: " + filename);
+			} else {
+				LOG.info("Unable to delete file: " + filename);
+			}
+
+			recipe.setImageFilename(null);
+			recipeRepository.save(recipe);
+			return recipe;
+		} else {
+			// No image to delete, just return recipe
+			return recipe;
+		}
+	}
 }

@@ -2,6 +2,7 @@ package com.bufkes.service.recipe.controller;
 
 import static com.bufkes.service.recipe.util.Assert.isTrue;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,17 +12,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bufkes.service.recipe.exception.ErrorType;
 import com.bufkes.service.recipe.model.Recipe;
 import com.bufkes.service.recipe.model.SearchCriterion;
 import com.bufkes.service.recipe.service.RecipeService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("${gateway.api.prefix}/recipes")
@@ -57,7 +54,33 @@ public class RecipeController {
 	public void deleteRecipe(@PathVariable String recipeId) {
 		recipeService.deleteRecipe(recipeId);
 	}
-	
+
+	@RequestMapping(value = "{recipeId}/images", method = RequestMethod.PUT)
+	public Recipe addImage(@PathVariable String recipeId, @RequestParam("file") MultipartFile file) {
+		LOG.info("Adding image to recipe {}", recipeId);
+
+		isTrue(StringUtils.isNotBlank(recipeId), ErrorType.BAD_REQUEST, "Recipe id cannot be blank");
+		isTrue(!file.isEmpty(), ErrorType.BAD_REQUEST, "Unable to save image because image is blank");
+
+		return recipeService.addImage(recipeId, file);
+	}
+
+	@RequestMapping(
+			value = "/{recipeId}/images",
+			method = RequestMethod.GET,
+			produces = MediaType.IMAGE_JPEG_VALUE
+	)
+	public @ResponseBody byte[] getImage(@PathVariable String recipeId) throws IOException {
+		LOG.info("Getting image for recipe {}", recipeId);
+
+		isTrue(StringUtils.isNotBlank(recipeId), ErrorType.BAD_REQUEST, "Recipe id cannot be blank");
+
+		return recipeService.getImage(recipeId);
+	}
+
+	@RequestMapping(value = "{recipeId}/images", method = RequestMethod.DELETE)
+	public Recipe deleteImage(@PathVariable String recipeId) { return recipeService.deleteImage(recipeId); }
+
 	@RequestMapping(value = "{recipeId}/searchcriteria", method = RequestMethod.PUT)
 	public Recipe addSearchCriterion(@PathVariable String recipeId, @RequestBody Map<String, String> criteria) {
 		for (Map.Entry<String, String> criterion : criteria.entrySet()) {

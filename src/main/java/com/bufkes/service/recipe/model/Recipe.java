@@ -56,6 +56,9 @@ public class Recipe {
 
 	private String url;
 
+	@Column(name = "image_filename")
+	private String imageFilename;
+
 	public String getId() {
 		return id;
 	}
@@ -159,6 +162,10 @@ public class Recipe {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public String getImageFilename() { return imageFilename; }
+
+	public void setImageFilename(String imageFilename) { this.imageFilename = imageFilename; }
 
 
 	public void setCriterion(SearchCriterion criterion) {
