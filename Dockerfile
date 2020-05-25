@@ -1,6 +1,7 @@
 FROM openjdk:latest
 
 RUN mkdir /opt/recipe/
+RUN mkdir /images
 RUN apt-get update -y
 RUN apt-get install maven -y
 ADD . /opt/recipe/
